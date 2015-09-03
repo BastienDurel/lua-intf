@@ -99,6 +99,17 @@ public:
     LuaContext& operator = (const LuaContext&) = delete;
 
     /**
+     * Move constructor
+     */
+    LuaContext(LuaContext&& from)
+        : L(from.L)
+        , m_own(from.m_own)
+    {
+        from.m_own = false;
+        from.L = nullptr;
+    }
+
+    /**
      * Implicit conversion for lua_State*
      */
     operator lua_State* () const

@@ -197,7 +197,7 @@ private:
         lua_rawget(L, -2);
 
         if (!lua_isnil(L, -1)) {
-            int len = lua_rawlen(L, -1);
+            int len = int(lua_rawlen(L, -1));
             for (int i = 1; i <= len; i++) {
                 // <class_meta> <downcast> <cast_func>
                 lua_rawgeti(L, -1, i);
@@ -497,12 +497,13 @@ struct LuaClassMapping
         return LuaCppObjectFactory<T, ObjectType, isShared, isRef>::cast(L, obj);
     }
 
-    static T& opt(lua_State* L, int index, const T&)
+    static const T& opt(lua_State* L, int index, const T& def)
     {
-        if (!lua_isnoneornil(L, index)) {
-            luaL_error(L, "nil passed to reference");
+        if (lua_isnoneornil(L, index)) {
+            return def;
+        } else {
+            return get(L, index);
         }
-        return get(L, index);
     }
 };
 

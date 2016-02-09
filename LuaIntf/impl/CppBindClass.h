@@ -348,6 +348,7 @@ struct CppBindClassMetaMethod
 
 //--------------------------------------------------------------------------
 
+template <typename PARENT>
 class CppBindModule;
 
 class CppBindClassBase
@@ -410,7 +411,8 @@ protected:
 template <typename T, typename PARENT>
 class CppBindClass : public CppBindClassBase
 {
-    friend class CppBindModule;
+    friend class LuaBinding;
+    template <typename PX> friend class CppBindModule;
     template <typename TX, typename PX> friend class CppBindClass;
 
 private:
